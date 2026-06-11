@@ -104,8 +104,10 @@ int Game::NumDistinctActions() {
     //0      = DrawFromDeck
     //1      = DrawFromDiscard
     //2-13   = ReplaceCard at positions 0-11
-    //14-25  = DiscardDrawnCardAndReveal at positions 0-11
-    //26-37  = RevealInitialCard at positions 0-11
+    //14-16  = DiscardDrawnCardAndReveal at positions 0-3
+    //17-18  = RevealInitialCard at positions 0-11
+    //19-34  = ChanceCardDraw at values -2-12
+    //35     = RealDraw
 
     return 35;
 }
