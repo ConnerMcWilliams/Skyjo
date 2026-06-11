@@ -1,0 +1,4 @@
+Games played: 156145
+Elapsed time: 10000 ms
+Average speed: 15.6144 games/ms
+Average speed: 15614.4 games/sec

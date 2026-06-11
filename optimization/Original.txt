@@ -1,0 +1,5 @@
+Games played: 2017
+Elapsed time: 10002.4 ms
+Average speed: 0.201651 games/ms
+Average speed: 201.651 games/sec
+

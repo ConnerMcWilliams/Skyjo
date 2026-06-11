@@ -1,0 +1,13 @@
+Games played: 32475
+Elapsed time: 10000.2 ms
+Average speed: 3.24744 games/ms
+Average speed: 3247.44 games/sec
+
+Agent 0:
+  Wins: 16533
+  Average score: 60.35
+
+Agent 1:
+  Wins: 15942
+  Average score: 60.3867
+
