@@ -2,7 +2,7 @@
 // Created by Conner on 5/26/2026.
 //
 
-#include "../include/skyjo/game.h"
+#include "../include/skyjo/Game.h"
 #include <map>
 #include <stdexcept>
 
