@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.2)
+cmake_minimum_required(VERSION 3.24)
 project(Skyjo)
 
 set(CMAKE_CXX_STANDARD 20)
