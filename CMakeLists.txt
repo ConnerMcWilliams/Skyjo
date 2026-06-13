@@ -1,19 +1,19 @@
-cmake_minimum_required(VERSION 4.2)
+cmake_minimum_required(VERSION 3.24)
 project(Skyjo)
 
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Skyjo main.cpp
-        src/player.cpp
-        include/skyjo/player.h
-        src/game.cpp
-        include/skyjo/game.h
-        src/card.cpp
-        include/skyjo/card.h
-        src/deck.cpp
-        include/skyjo/deck.h
-        src/state.cpp
-        include/skyjo/state.h
+        src/Player.cpp
+        include/skyjo/Player.h
+        src/Game.cpp
+        include/skyjo/Game.h
+        src/Card.cpp
+        include/skyjo/Card.h
+        src/Deck.cpp
+        include/skyjo/Deck.h
+        src/State.cpp
+        include/skyjo/State.h
         include/skyjo/Action.h
         include/skyjo/agents/Agent.h
         src/agents/RandomAgent.cpp
@@ -37,14 +37,14 @@ add_executable(Skyjo main.cpp
 find_package(Catch2 CONFIG REQUIRED)
 add_executable(tests
         test-cases/test_card.cpp
-        src/card.cpp
+        src/Card.cpp
         test-cases/test_deck.cpp
-        src/deck.cpp
+        src/Deck.cpp
         test-cases/test_player.cpp
-        src/player.cpp
+        src/Player.cpp
         test-cases/test_game.cpp
-        src/game.cpp
+        src/Game.cpp
         test-cases/test_state.cpp
-        src/state.cpp
+        src/State.cpp
 )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)

@@ -29,6 +29,7 @@ public:
 
     [[nodiscard]] int CurrentPlayer() const;
     [[nodiscard]] std::array<CardSlot, 12> GetCurrentPlayerHand() const;
+    [[nodiscard]] std::vector<Player> Players() const;
 
     [[nodiscard]] Phase CurrentPhase() const;
     [[nodiscard]] Card DrawnCard() const;
@@ -47,6 +48,7 @@ public:
     [[nodiscard]] std::vector<int> Scores() const;
 
     [[nodiscard]] Game GameInstance() const;
+    [[nodiscard]] Deck DeckInstance() const;
 
     [[nodiscard]] std::string ToString() const;
     [[nodiscard]] std::string ObservationString(int player) const;
