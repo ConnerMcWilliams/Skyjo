@@ -42,7 +42,6 @@ double MinimaxAgent::Search(State state, int root_player,
         return EvalFunction(state, root_player);
     }
     if (current_depth == 0) {
-        // TODO: Check for horizons or single lines n stuff
         return EvalFunction(state, root_player);
     }
     if (state.IsChancePhase()) {
