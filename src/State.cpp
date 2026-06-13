@@ -25,6 +25,14 @@ bool State::IsChancePhase() const {
     return phase_ == Phase::ChanceDrawFromDeck;
 }
 
+Deck State::DeckInstance() const {
+    return deck_;
+}
+
+std::vector<Player> State::Players() const {
+    return players_;
+}
+
 std::vector<Action> State::LegalActions() const {
     std::vector<Action> legal_actions;
     legal_actions.reserve(22);

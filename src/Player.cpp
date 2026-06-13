@@ -83,7 +83,7 @@ RevealResult Player::RevealCard(int column) {
 }
 
 bool Player::ColumnFullyRevealed(int column) const {
-    uint16_t column_bits = (column_mask_ >> (4 * column)) & 0b1111;
+    uint16_t column_bits = column_mask_ >> (4 * column) & 0b1111;
     return (column_bits & 0b0111) == 0b0111;
 }
 
