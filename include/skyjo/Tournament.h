@@ -26,6 +26,8 @@ struct AgentTournamentStatistics {
     std::uint64_t outright_wins = 0;
 
     std::int64_t total_score = 0;
+
+    double elo = 1500.0;
 };
 
 struct PairwiseResult {
@@ -65,11 +67,27 @@ void UpdateTournamentResults(
     const GameResult& result
 );
 
+[[nodiscard]] GameResult RunOneGame(
+    const Game& game,
+    unsigned int seed,
+    std::vector<AgentId> available_agent_ids,
+    std::size_t num_players,
+    const std::vector<TournamentAgent> &agents
+    );
+
 [[nodiscard]] TournamentResults ConductTournament(
     const Game& game,
     const std::vector<TournamentAgent>& agents,
     std::uint64_t rounds,
     unsigned int seed
+);
+
+[[nodiscard]] TournamentResults ConductTournamentWithThread(
+    const Game& game,
+    const std::vector<TournamentAgent>& agents,
+    std::uint64_t rounds,
+    unsigned int seed,
+    unsigned int threads
 );
 
 #endif // SKYJO_TOURNAMENT_H

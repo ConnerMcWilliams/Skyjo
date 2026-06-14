@@ -10,6 +10,7 @@
 #include <memory>
 #include <chrono>
 #include <fstream>
+#include <iomanip>
 #include <vector>
 
 #include "include/skyjo/Experiment.h"
@@ -78,12 +79,15 @@ void TournamentExperiment(
     const unsigned int seed
     ) {
 
-    TournamentResults results = ConductTournament(game, tournament_agents, rounds, seed);
+    std::cout << std::fixed << std::setprecision(2);
+
+    TournamentResults results = ConductTournamentWithThread(game, tournament_agents, rounds, seed, 32);
 
     for (std::size_t id = 0; id < tournament_agents.size(); ++id) {
         const auto& stats = results.agent_statistics[id];
 
         std::cout << tournament_agents[id].name << '\n';
+        std::cout << "  Elo: " << stats.elo << '\n';
         std::cout << "  Games: " << stats.games_played << '\n';
         std::cout << "  Wins: " << stats.outright_wins << '\n';
 
@@ -132,10 +136,24 @@ int main() {
     constexpr int sample_every_ms = 10;
     constexpr int rounds = 1000;
 
-    const TournamentAgent tournament_agent_minimax {
-        .name = "MinimaxAgent",
+    const TournamentAgent tournament_agent_minimax_3 {
+        .name = "MinimaxAgent_3",
         .factory = [](unsigned int seed) {
             return std::make_unique<MinimaxAgent>(3);
+        }
+    };
+
+    const TournamentAgent tournament_agent_minimax_4 {
+        .name = "MinimaxAgent_4",
+        .factory = [](unsigned int seed) {
+            return std::make_unique<MinimaxAgent>(4);
+        }
+    };
+
+    const TournamentAgent tournament_agent_monte_carlo_1000 {
+        .name = "MonteCarloAgent",
+        .factory = [](unsigned int seed) {
+            return std::make_unique<MonteCarloAgent>(5000, 2, seed);
         }
     };
 
@@ -156,7 +174,8 @@ int main() {
     const std::vector tournament_agents{
         tournament_agent_random,
         tournament_agent_logic,
-        tournament_agent_minimax
+        tournament_agent_minimax_3,
+        tournament_agent_monte_carlo_1000
     };
 
     TournamentExperiment(game, tournament_agents, rounds, 42);
