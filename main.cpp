@@ -2,6 +2,7 @@
 #include "./include/skyjo/agents/Agent.h"
 #include "./include/skyjo/agents/RandomAgent.h"
 #include "./include/skyjo/SpeedExperiment.h"
+#include "./include/skyjo/Tournament.h"
 
 #include <iostream>
 #include <cstdio>
@@ -9,6 +10,7 @@
 #include <memory>
 #include <chrono>
 #include <fstream>
+#include <iomanip>
 #include <vector>
 
 #include "include/skyjo/Experiment.h"
@@ -70,6 +72,35 @@ void SpeedExperiment(const int seconds, const int sample_every_ms, const Game &g
     }
 }
 
+void TournamentExperiment(
+    const Game& game,
+    const std::vector<TournamentAgent>& tournament_agents,
+    const int rounds,
+    const unsigned int seed
+    ) {
+
+    std::cout << std::fixed << std::setprecision(2);
+
+    TournamentResults results = ConductTournamentWithThread(game, tournament_agents, rounds, seed, 32);
+
+    for (std::size_t id = 0; id < tournament_agents.size(); ++id) {
+        const auto& stats = results.agent_statistics[id];
+
+        std::cout << tournament_agents[id].name << '\n';
+        std::cout << "  Elo: " << stats.elo << '\n';
+        std::cout << "  Games: " << stats.games_played << '\n';
+        std::cout << "  Wins: " << stats.outright_wins << '\n';
+
+        const double average_score =
+            stats.games_played == 0
+                ? 0.0
+                : static_cast<double>(stats.total_score) /
+                      static_cast<double>(stats.games_played);
+
+        std::cout << "  Average score: " << average_score << "\n\n";
+    }
+}
+
 int main() {
     const std::map<int, int> distribution = {
         {-2, 5},
@@ -89,7 +120,7 @@ int main() {
         {12, 10}
     };
 
-    const Game game(6, distribution);
+    const Game game(2, distribution);
 
     std::vector<std::unique_ptr<Agent>> agents;
     agents.push_back(std::make_unique<MonteCarloAgent>(5000, 2.5, 40));
@@ -101,12 +132,55 @@ int main() {
     agents.push_back(std::make_unique<RandomAgent>(60));
     agents.push_back(std::make_unique<RandomAgent>(70));
 
-    // TODO: Make all of this run in parallel.
-
     constexpr double seconds = 100;
     constexpr int sample_every_ms = 10;
+    constexpr int rounds = 1000;
 
-    SpeedExperiment(seconds, sample_every_ms, game, agents);
+    const TournamentAgent tournament_agent_minimax_3 {
+        .name = "MinimaxAgent_3",
+        .factory = [](unsigned int seed) {
+            return std::make_unique<MinimaxAgent>(3);
+        }
+    };
+
+    const TournamentAgent tournament_agent_minimax_4 {
+        .name = "MinimaxAgent_4",
+        .factory = [](unsigned int seed) {
+            return std::make_unique<MinimaxAgent>(4);
+        }
+    };
+
+    const TournamentAgent tournament_agent_monte_carlo_1000 {
+        .name = "MonteCarloAgent",
+        .factory = [](unsigned int seed) {
+            return std::make_unique<MonteCarloAgent>(5000, 2, seed);
+        }
+    };
+
+    const TournamentAgent tournament_agent_random {
+        .name = "RandomAgent",
+        .factory = [](unsigned int seed) {
+            return std::make_unique<RandomAgent>(seed);
+        }
+    };
+
+    const TournamentAgent tournament_agent_logic {
+        .name = "BasicLogic",
+        .factory = [](unsigned int seed) {
+            return std::make_unique<BasicLogic>(3, seed);
+        }
+    };
+
+    const std::vector tournament_agents{
+        tournament_agent_random,
+        tournament_agent_logic,
+        tournament_agent_minimax_3,
+        tournament_agent_monte_carlo_1000
+    };
+
+    TournamentExperiment(game, tournament_agents, rounds, 42);
+
+    //SpeedExperiment(seconds, sample_every_ms, game, agents);
 
     //RunNormalExperiment(1, game, agents);
 
