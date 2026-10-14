@@ -6,7 +6,7 @@
 #define SKYJO_SIMULATION_H
 #include <memory>
 #include <vector>
-#include "./Game.h"
+#include "../skyjo/Game.h"
 
 class Agent;
 

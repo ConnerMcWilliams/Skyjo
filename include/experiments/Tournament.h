@@ -10,8 +10,8 @@
 #include <string>
 #include <vector>
 
-#include "Game.h"
-#include "agents/Agent.h"
+#include "../skyjo/Game.h"
+#include "../agents/Agent.h"
 
 using AgentId = std::uint16_t;
 
@@ -52,16 +52,31 @@ struct GameResult {
     std::uint64_t seed = 0;
 };
 
+/**
+ *
+ * @param tournament_results
+ * @param matchup_matrix
+ */
 void CalculateElo(
     TournamentResults& tournament_results,
     const MatchupMatrix& matchup_matrix
 );
 
+/**
+ *
+ * @param matchup_matrix
+ * @param result
+ */
 void UpdateMatchupMatrix(
     MatchupMatrix& matchup_matrix,
     const GameResult& result
 );
 
+/**
+ *
+ * @param tournament_results
+ * @param result
+ */
 void UpdateTournamentResults(
     TournamentResults& tournament_results,
     const GameResult& result
@@ -82,6 +97,15 @@ void UpdateTournamentResults(
     unsigned int seed
 );
 
+/**
+ *
+ * @param game
+ * @param agents
+ * @param rounds
+ * @param seed
+ * @param threads
+ * @return
+ */
 [[nodiscard]] TournamentResults ConductTournamentWithThread(
     const Game& game,
     const std::vector<TournamentAgent>& agents,
@@ -89,5 +113,19 @@ void UpdateTournamentResults(
     unsigned int seed,
     unsigned int threads
 );
+
+/**
+ *
+ * @param game
+ * @param tournament_agents
+ * @param rounds
+ * @param seed
+ */
+void TournamentExperiment(
+    const Game& game,
+    const std::vector<TournamentAgent>& tournament_agents,
+    int rounds,
+    unsigned int seed
+    );
 
 #endif // SKYJO_TOURNAMENT_H

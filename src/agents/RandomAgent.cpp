@@ -2,7 +2,7 @@
 // Created by Conner on 5/30/2026.
 //
 
-#include "../../include/skyjo/agents/RandomAgent.h"
+#include "../../include/agents/RandomAgent.h"
 
 #include <random>
 #include "../../include/skyjo/State.h"

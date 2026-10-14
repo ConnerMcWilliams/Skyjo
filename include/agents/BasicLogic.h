@@ -6,8 +6,7 @@
 #define SKYJO_BASICLOGIC_H
 
 #include "./Agent.h"
-#include "../Game.h"
-#include "../State.h"
+#include "../skyjo/State.h"
 
 #include <random>
 

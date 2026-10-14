@@ -5,8 +5,8 @@
 #ifndef SKYJO_SPEEDEXPERIMENT_H
 #define SKYJO_SPEEDEXPERIMENT_H
 
-#include "Game.h"
-#include "./agents/Agent.h"
+#include "../skyjo/Game.h"
+#include "../agents/Agent.h"
 
 #include <memory>
 #include <vector>
@@ -35,7 +35,14 @@ struct SpeedExperimentResult {
     std::vector<SpeedSample> speed_samples;
 };
 
-SpeedExperimentResult RunSpeedExperiment(
+void RunSpeedExperiment(
+    int seconds,
+    int sample_every_ms,
+    const Game &game,
+    std::vector<std::unique_ptr<Agent>> &agents
+    );
+
+[[nodiscard]] SpeedExperimentResult RunSpeedExperiment(
     const Game& game,
     std::vector<std::unique_ptr<Agent>>& agents,
     double seconds,

@@ -7,8 +7,6 @@
 #include <memory>
 
 #include "Agent.h"
-#include "../Action.h"
-#include "../State.h"
 
 struct MCTSNode {
     State state;
@@ -44,6 +42,7 @@ private:
     std::mt19937 rng_;
 
     MCTSNode* Select(MCTSNode* node, PlayerId root_player);
+    MCTSNode* SelectChanceNode(MCTSNode* node);
     double NodeEval(MCTSNode* node);
 
     MCTSNode* Expand(MCTSNode* node, PlayerId root_player);

@@ -2,7 +2,7 @@
 // Created by Conner on 6/1/2026.
 //
 
-#include "../../include/skyjo/agents/BasicLogic.h"
+#include "../../include/agents/BasicLogic.h"
 #include "../../include/skyjo/State.h"
 
 #include <random>

@@ -4,13 +4,14 @@
 
 #ifndef SKYJO_AGENT_H
 #define SKYJO_AGENT_H
-#include "../State.h"
-#include "../Action.h"
+#include "../skyjo/Action.h"
+#include "../skyjo/State.h"
 
 class Agent {
 public:
     virtual ~Agent() = default;
 
+    /// @returns Returns a legal action based on the state
     [[nodiscard]] virtual Action ChooseAction(const State& state) = 0;
 };
 
