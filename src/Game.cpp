@@ -47,13 +47,13 @@ Action Game::SerializeAction(const SkyjoAction &action) const {
             return 18 + action.position;
 
         case ActionType::ChanceCardDraw:
-            if (action.position < -2 || action.position >= 12) {
+            if (action.position < -2 || action.position > 12) {
                 throw std::invalid_argument("Invalid ChanceCard value.");
             }
             // The two is for the -2 and -1.
             return (20 + 2) + action.position;
         case ActionType::RealDraw:
-            return 35;
+            return 36;
     }
 
     throw std::invalid_argument("Unknown action type.");
@@ -85,12 +85,12 @@ SkyjoAction Game::DeserializeAction(const Action action) const {
             action - 18
         };
     }
-    if (action >= 20 && action < 35) {
+    if (action >= 20 && action <= 35) {
         return SkyjoAction{
         ActionType::ChanceCardDraw,
         action - 22};
     }
-    if (action == 35) {
+    if (action == 36) {
         return SkyjoAction{
         ActionType::RealDraw,
         -1};
@@ -109,7 +109,7 @@ int Game::NumDistinctActions() {
     //19-34  = ChanceCardDraw at values -2-12
     //35     = RealDraw
 
-    return 35;
+    return 36;
 }
 
 const std::map<int, int>& Game::distribution() const {

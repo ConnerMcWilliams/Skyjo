@@ -2,10 +2,10 @@
 // Created by Conner on 5/30/2026.
 //
 
-#include "../include/skyjo/Simulation.h"
-#include "../include/skyjo/Game.h"
-#include "../include/skyjo/State.h"
-#include "../include/skyjo/agents/Agent.h"
+#include "../../include/experiments/Simulation.h"
+#include "../../include/skyjo/Game.h"
+#include "../../include/skyjo/State.h"
+#include "../../include/agents/Agent.h"
 
 #include <stdexcept>
 

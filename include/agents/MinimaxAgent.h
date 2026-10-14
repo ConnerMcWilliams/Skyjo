@@ -6,7 +6,6 @@
 #define SKYJO_MINIMAXAGENT_H
 
 #include "./Agent.h"
-#include "../State.h"
 
 class MinimaxAgent : public Agent {
 public:

@@ -2,12 +2,13 @@
 // Created by Conner on 6/8/2026.
 //
 
-#include "../../include/skyjo/agents/MonteCarloAgent.h"
+#include "../../include/agents/MonteCarloAgent.h"
 #include <random>
 #include <memory>
 #include <cmath>
 #include <limits>
 #include <algorithm>
+#include <iostream>
 
 MonteCarloAgent::MonteCarloAgent(int num_simulations, double exploration_constant, unsigned int seed) :
 num_simulations_(num_simulations), rng_(seed), exploration_constant_(exploration_constant) {
@@ -54,8 +55,37 @@ double MonteCarloAgent::NodeEval(MCTSNode *node) {
     return average + exploration_constant_ * std::sqrt(bound);
 }
 
+MCTSNode *MonteCarloAgent::SelectChanceNode(MCTSNode *node) {
+    int sampled_value = node->state.SampleOutcome(rng_);
+    Action chance_action = node->state.GameInstance().SerializeAction(
+        SkyjoAction{ActionType::ChanceCardDraw, sampled_value}
+    );
+
+    for (auto& child : node->child_nodes) {
+        if (child->action_from_parent == chance_action) {
+            return child.get();
+        }
+    }
+
+    State child = node->state;
+    child.ApplyAction(chance_action);
+
+    node->child_nodes.push_back(std::make_unique<MCTSNode>(
+        child,
+        node,
+        chance_action
+    ));
+
+    return node->child_nodes.back().get();
+}
+
 MCTSNode* MonteCarloAgent::Select(MCTSNode *node, PlayerId root_player) {
     while (!node->state.IsTerminal()) {
+        if (node->state.IsChancePhase()) {
+            node = SelectChanceNode(node);
+            continue;
+        }
+
         if (!node->actions_not_taken.empty()) {
             return Expand(node, root_player);
         }
@@ -111,7 +141,7 @@ MCTSNode* MonteCarloAgent::Expand(MCTSNode *node, const PlayerId root_player) {
     State child_state = node->state;
     child_state.ApplyAction(new_action);
 
-    ResolveNonRootAndChance(child_state, root_player);
+    //ResolveNonRootAndChance(child_state, root_player);
 
     node->child_nodes.push_back(
         std::make_unique<MCTSNode>(
@@ -190,7 +220,7 @@ double MonteCarloAgent::EvaluateTerminal(State state, PlayerId root_player) {
         }
     }
 
-    double opponent_avg =
+    const double opponent_avg =
     static_cast<double>(opponent_cum_scores) / static_cast<double>(scores.size() - 1);
 
     return opponent_avg - scores[root_player];

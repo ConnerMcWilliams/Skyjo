@@ -2,16 +2,19 @@
 // Created by Conner on 6/10/2026.
 //
 
-#include "../include/skyjo/Tournament.h"
+#include "../../include/experiments/Tournament.h"
 
 #include <iostream>
 
-#include "../include/skyjo/Tournament.h"
+#include "../../include/skyjo/State.h"
+#include "../../include/agents/Agent.h"
 
 #include <thread>
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 #include <future>
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <numeric>
@@ -496,4 +499,35 @@ TournamentResults ConductTournamentWithThread(
     );
 
     return tournament_results;
+}
+
+void TournamentExperiment(
+    const Game& game,
+    const std::vector<TournamentAgent>& tournament_agents,
+    const int rounds,
+    const unsigned int seed
+    ) {
+
+    std::ofstream out("./Tournament.txt");
+
+    std::cout << std::fixed << std::setprecision(2);
+
+    TournamentResults results = ConductTournamentWithThread(game, tournament_agents, rounds, seed, 32);
+
+    for (std::size_t id = 0; id < tournament_agents.size(); ++id) {
+        const auto& stats = results.agent_statistics[id];
+
+        std::cout << tournament_agents[id].name << '\n';
+        std::cout << "  Elo: " << stats.elo << '\n';
+        std::cout << "  Games: " << stats.games_played << '\n';
+        std::cout << "  Wins: " << stats.outright_wins << '\n';
+
+        const double average_score =
+            stats.games_played == 0
+                ? 0.0
+                : static_cast<double>(stats.total_score) /
+                      static_cast<double>(stats.games_played);
+
+        std::cout << "  Average score: " << average_score << "\n\n";
+    }
 }

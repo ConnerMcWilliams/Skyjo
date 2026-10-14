@@ -2,7 +2,7 @@
 // Created by Conner on 6/1/2026.
 //
 
-#include "../../include/skyjo/agents/MinimaxAgent.h"
+#include "../../include/agents/MinimaxAgent.h"
 
 MinimaxAgent::MinimaxAgent(const int depth) : depth_(depth) {
 }
@@ -105,5 +105,17 @@ double MinimaxAgent::ChanceSearch(State state, int root_player,
 }
 
 double MinimaxAgent::EvalFunction(State state, int root_player) const {
-    return -state.Scores()[root_player];
+    std::vector<int> scores = state.Scores();
+    int opponent_cum_scores = 0;
+
+    for (int i = 0; i < scores.size(); ++i) {
+        if (i != root_player) {
+            opponent_cum_scores += scores[i];
+        }
+    }
+
+    double opponent_avg =
+    static_cast<double>(opponent_cum_scores) / static_cast<double>(scores.size() - 1);
+
+    return opponent_avg - scores[root_player];
 }

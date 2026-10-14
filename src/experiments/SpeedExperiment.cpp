@@ -2,13 +2,37 @@
 // Created by Conner on 6/1/2026.
 //
 
-#include "../include/skyjo/SpeedExperiment.h"
-#include "../include/skyjo/Simulation.h"
+#include "../../include/experiments/SpeedExperiment.h"
+#include "../../include/experiments/Simulation.h"
 
 
 #include <chrono>
+#include <fstream>
+#include <iostream>
 #include <vector>
 #include <memory>
+
+void RunSpeedExperiment(const int seconds, const int sample_every_ms, const Game &game, std::vector<std::unique_ptr<Agent>> &agents) {
+    const SpeedExperimentResult result =
+        RunSpeedExperiment(game, agents, seconds, sample_every_ms);
+
+    std::ofstream out("./SpeedExperiment_0.txt");
+    std::cout << "Games played: " << result.num_experiments << "\n";
+    std::cout << "Elapsed time: " << result.elapsed_ms << " ms\n";
+    std::cout << "Average speed: "
+              << result.experiments_per_ms
+              << " games/ms\n";
+
+    std::cout << "Average speed: "
+              << result.experiments_per_ms * 1000.0
+              << " games/sec\n\n";
+
+    for (int p = 0; p < game.NumPlayers(); ++p) {
+        std::cout << "Agent " << p << ":\n";
+        std::cout << "  Wins: " << result.wins[p] << "\n";
+        std::cout << "  Average score: " << result.average_scores[p] << "\n\n";
+    }
+}
 
 SpeedExperimentResult RunSpeedExperiment(
     const Game& game,
